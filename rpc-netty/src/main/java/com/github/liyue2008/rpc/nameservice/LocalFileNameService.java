@@ -92,6 +92,13 @@ public class LocalFileNameService implements NameService {
         }
     }
 
+    /**
+     * 获取对应的服务地址
+     * 根据服务名称 获得服务地址列表
+     * @param serviceName 服务名称
+     * @return
+     * @throws IOException
+     */
     @Override
     public URI lookupService(String serviceName) throws IOException {
         Metadata metadata;

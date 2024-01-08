@@ -23,6 +23,8 @@ import java.util.Map;
 /**
  * @author LiYue
  * Date: 2019/9/20
+ * 序列化器的 SPI 工厂类，把具体的序列化器注册到工厂中
+ * 当调用具体序列化方法的时候 会根据类型找到对应的序列化器 执行对应的序列化方法
  */
 @SuppressWarnings("unchecked")
 public class SerializeSupport {
@@ -38,6 +40,8 @@ public class SerializeSupport {
                     serializer.type());
         }
     }
+
+    // byte 数组的第一位是 序列化类型，根据这个类型进行后续的 反序列化 动作
     private static byte parseEntryType(byte[] buffer) {
         return buffer[0];
     }
@@ -71,13 +75,16 @@ public class SerializeSupport {
     }
 
     public static <E> byte [] serialize(E  entry) {
+        //根据 class 类型找出对应的序列化器
         @SuppressWarnings("unchecked")
         Serializer<E> serializer = (Serializer<E>) serializerMap.get(entry.getClass());
         if(serializer == null) {
             throw new SerializeException(String.format("Unknown entry class type: %s", entry.getClass().toString()));
         }
         byte [] bytes = new byte [serializer.size(entry) + 1];
+        //序列化后 byte 数组的第一个元素是标识符，标识具体的数据类型，用于反序列化 解析
         bytes[0] = serializer.type();
+        // 进行具体的序列化工作
         serializer.serialize(entry, bytes, 1, bytes.length - 1);
         return bytes;
     }

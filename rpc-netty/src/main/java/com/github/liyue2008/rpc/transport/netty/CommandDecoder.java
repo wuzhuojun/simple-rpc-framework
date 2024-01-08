@@ -40,6 +40,7 @@ public abstract class CommandDecoder extends ByteToMessageDecoder {
             return;
         }
 
+        //解码出头部信息 剩余长度是 payload的长度，头部是定长 payload是不定长
         Header header = decodeHeader(channelHandlerContext, byteBuf);
         int payloadLength  = length - header.length();
         byte [] payload = new byte[payloadLength];
@@ -47,5 +48,9 @@ public abstract class CommandDecoder extends ByteToMessageDecoder {
         list.add(new Command(header, payload));
     }
 
+    /**
+     * 解码头部 具体实现 放在请求解码器 和 响应解码器中
+     * 头部一般是固定长度
+     */
     protected abstract Header decodeHeader(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) ;
 }

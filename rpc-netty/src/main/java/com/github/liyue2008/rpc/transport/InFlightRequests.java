@@ -31,6 +31,7 @@ public class InFlightRequests implements Closeable {
     private final static long TIMEOUT_SEC = 10L;
     private final Semaphore semaphore = new Semaphore(10);
     private final Map<Integer, ResponseFuture> futureMap = new ConcurrentHashMap<>();
+    //通过定时器 把 超时的请求清除掉 并通知应用层
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private final ScheduledFuture scheduledFuture;
     public InFlightRequests() {
@@ -45,6 +46,9 @@ public class InFlightRequests implements Closeable {
         }
     }
 
+    /**
+     * 清除超时失效的future
+     */
     private void removeTimeoutFutures() {
         futureMap.entrySet().removeIf(entry -> {
             if( System.nanoTime() - entry.getValue().getTimestamp() > TIMEOUT_SEC * 1000000000L) {

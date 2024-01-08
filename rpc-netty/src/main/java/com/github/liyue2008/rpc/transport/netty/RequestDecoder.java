@@ -23,6 +23,9 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class RequestDecoder extends CommandDecoder {
 
+    /**
+     * 请求解码器 获取头部的 三个 int 型字段，剩下的是 请求体
+     */
     @Override
     protected Header decodeHeader(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) {
         return new Header(

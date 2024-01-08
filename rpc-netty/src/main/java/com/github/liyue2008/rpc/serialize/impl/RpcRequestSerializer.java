@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author LiYue
  * Date: 2019/9/27
+ * payload 的序列化 和 反序列化
  */
 public class RpcRequestSerializer implements Serializer<RpcRequest> {
     @Override

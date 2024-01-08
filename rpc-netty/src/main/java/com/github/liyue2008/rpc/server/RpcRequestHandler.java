@@ -38,6 +38,11 @@ public class RpcRequestHandler implements RequestHandler, ServiceProviderRegistr
     private static final Logger logger = LoggerFactory.getLogger(RpcRequestHandler.class);
     private Map<String/*service name*/, Object/*service provider*/> serviceProviders = new HashMap<>();
 
+    /**
+     *  netty server 端接收到请求命令后，调用此方法处理请求命令
+     *  也就是把 请求的进行反序列化 根据rpcRequest中的接口名、方法名、参数，调用服务提供者的对应方法，得到结果，
+     *  再把结果序列化成响应命令返回给客户端
+     */
     @Override
     public Command handle(Command requestCommand) {
         Header header = requestCommand.getHeader();

@@ -22,6 +22,7 @@ import java.util.Map;
 /**
  * @author LiYue
  * Date: 2019/9/27
+ * stub 工厂，动态的生成 stub 的代码 并且编译再通过 反射获得具体实例
  */
 public class DynamicStubFactory implements StubFactory{
     private final static String STUB_SOURCE_TEMPLATE =
@@ -43,6 +44,13 @@ public class DynamicStubFactory implements StubFactory{
             "    }\n" +
             "}";
 
+    /**
+     * 动态创建 代理类 并通过反射创建代理对象
+     * @param transport
+     * @param serviceClass
+     * @return
+     * @param <T>
+     */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T createStub(Transport transport, Class<T> serviceClass) {

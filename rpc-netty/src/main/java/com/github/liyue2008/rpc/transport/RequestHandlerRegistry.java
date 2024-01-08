@@ -36,6 +36,9 @@ public class RequestHandlerRegistry {
         return instance;
     }
 
+    /**
+     * 通过 SPI 机制加载 classpath 下的所有 RequestHandler 实现
+     */
     private RequestHandlerRegistry() {
         Collection<RequestHandler> requestHandlers = ServiceSupport.loadAll(RequestHandler.class);
         for (RequestHandler requestHandler : requestHandlers) {

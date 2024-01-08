@@ -41,6 +41,8 @@ public class Client {
             URI uri = nameService.lookupService(serviceName);
             assert uri != null;
             logger.info("找到服务{}，提供者: {}.", serviceName, uri);
+            //通过 stub 创建代理类 通过 反射获得 HelloService 的代理实例 调用远程方法 实际是调用 AbstractStub.invokeRemote
+            // getRemoteService 时 在内部就 注册了 ResponseInvocation 当 netty 收到响应结果的信息时 会触发 ResponseInvocation.channelRead0 方法
             HelloService helloService = rpcAccessPoint.getRemoteService(uri, HelloService.class);
             logger.info("请求服务, name: {}...", name);
             String response = helloService.hello(name);

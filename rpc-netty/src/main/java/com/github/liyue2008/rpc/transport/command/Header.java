@@ -16,6 +16,7 @@ package com.github.liyue2008.rpc.transport.command;
 /**
  * @author LiYue
  * Date: 2019/9/20
+ * 请求的协议头
  */
 public class Header {
     private int requestId;

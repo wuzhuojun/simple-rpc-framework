@@ -35,9 +35,13 @@ public class NettyTransport implements Transport {
         this.inFlightRequests = inFlightRequests;
     }
 
-
-
-
+    /**
+     * 发送请求 把具体的对象请求 类名 方法名 参数 进行序列化 封装成 Command 命令
+     * 发出请求时 把请求封装 并丢到 inFlightRequests 中 表达的是飞行中的请求 因为请求是异步的
+     * 当拿到结果之后 就从 inFlightRequests 中移除 并通过 future 获取结果 再调用回调 通知业务层处理
+     * @param request 请求命令
+     * @return
+     */
     @Override
     public  CompletableFuture<Command> send(Command request) {
         // 构建返回值

@@ -44,12 +44,20 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
     private final StubFactory stubFactory = ServiceSupport.load(StubFactory.class);
     private final ServiceProviderRegistry serviceProviderRegistry = ServiceSupport.load(ServiceProviderRegistry.class);
 
+    /**
+     * 根据服务地址 获得远程服务的代理对象
+     * @param uri 远程服务地址
+     * @param serviceClass 服务的接口类的Class
+     * @return
+     * @param <T>
+     */
     @Override
     public <T> T getRemoteService(URI uri, Class<T> serviceClass) {
         Transport transport = clientMap.computeIfAbsent(uri, this::createTransport);
         return stubFactory.createStub(transport, serviceClass);
     }
 
+    //通过 netty 提供的方法 创建具体的 Transport 传输
     private Transport createTransport(URI uri) {
         try {
             return client.createTransport(new InetSocketAddress(uri.getHost(), uri.getPort()),30000L);
@@ -63,6 +71,11 @@ public class NettyRpcAccessPoint implements RpcAccessPoint {
         return uri;
     }
 
+    /**
+     * rpc 服务端启动 通过 SPI 机制 加载具体的 TransportServer 实现类 NettyServer
+     * @return
+     * @throws Exception
+     */
     @Override
     public synchronized Closeable startServer() throws Exception {
         if (null == server) {

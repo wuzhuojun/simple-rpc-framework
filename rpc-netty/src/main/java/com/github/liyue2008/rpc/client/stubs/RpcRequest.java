@@ -16,6 +16,7 @@ package com.github.liyue2008.rpc.client.stubs;
 /**
  * @author LiYue
  * Date: 2019/9/27
+ * 对请求对象的封装 然后 被序列化为 byte 数组 作为 payload 传输
  */
 public class RpcRequest {
     private final String interfaceName;

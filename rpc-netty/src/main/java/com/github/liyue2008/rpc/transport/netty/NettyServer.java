@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author LiYue
  * Date: 2019/9/20
+ * netty 服务端 通过 SPI 机制加载 进行实例化
  */
 public class NettyServer implements TransportServer {
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
@@ -42,6 +43,12 @@ public class NettyServer implements TransportServer {
     private Channel channel;
     private RequestHandlerRegistry requestHandlerRegistry;
 
+    /**
+     * 服务启动 初始化 创建端口监听 和 事件循环
+     * @param requestHandlerRegistry
+     * @param port
+     * @throws Exception
+     */
     @Override
     public void start(RequestHandlerRegistry requestHandlerRegistry, int port) throws Exception {
         this.port = port;

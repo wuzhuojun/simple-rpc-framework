@@ -16,6 +16,7 @@ package com.github.liyue2008.rpc.transport.command;
 /**
  * @author LiYue
  * Date: 2019/9/20
+ * 完整报文 包含协议头 和 报文体
  */
 public class Command {
     protected Header header;

@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author LiYue
  * Date: 2019/9/20
+ * 响应协议头
  */
 public class ResponseHeader extends Header {
     private int code;

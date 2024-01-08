@@ -26,10 +26,15 @@ import org.slf4j.LoggerFactory;
 /**
  * @author LiYue
  * Date: 2019/9/20
+ * 在 client 端处理 ，在 netty 初始化的时候 把 ResponseInvocation 注册到 netty 中
+ * 当 client 的 netty 收到响应结果的数据时 会触发 ResponseInvocation 的调用
  */
 @ChannelHandler.Sharable
 public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
     private static final Logger logger = LoggerFactory.getLogger(ResponseInvocation.class);
+
+    // 这个表示是 飞行中的请求，client 端的请求都是异步 不是 立马返回的 所以把执行中的请求封装成 future
+    // dubbo 中 client 端看起来像是同步调用 实际上 是调用层 用了 future.get 阻塞等待，但 rpc 内部的实现是异步的
     private final InFlightRequests inFlightRequests;
 
     ResponseInvocation(InFlightRequests inFlightRequests) {
@@ -38,8 +43,10 @@ public class ResponseInvocation extends SimpleChannelInboundHandler<Command> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Command response) {
+        // 每处理一个请求的响应 就把飞行中的请求 移除掉，并进行 future.complete 通知 应用层 进行响应结果的处理
         ResponseFuture future = inFlightRequests.remove(response.getHeader().getRequestId());
         if(null != future) {
+            // 把响应结果 封装成 Command ，当应用层 通过 future.get() 获取到响应结果
             future.getFuture().complete(response);
         } else {
             logger.warn("Drop response: {}", response);

@@ -42,6 +42,7 @@ public class Server {
             NameService nameService = rpcAccessPoint.getNameService(file.toURI());
             assert nameService != null;
             logger.info("向RpcAccessPoint注册{}服务...", serviceName);
+            // server 端是通过 动态代理 的方式来调用 HelloService 的具体方法
             URI uri = rpcAccessPoint.addServiceProvider(helloService, HelloService.class);
             logger.info("服务名: {}, 向NameService注册...", serviceName);
             nameService.registerService(serviceName, uri);

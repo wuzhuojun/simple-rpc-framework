@@ -22,6 +22,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 /**
  * @author LiYue
  * Date: 2019/9/23
+ * 命令编码 把头部固定长度 写入到 byteBuffer 再把payload 写入到 byteBuffer
  */
 public abstract class CommandEncoder extends MessageToByteEncoder {
 
